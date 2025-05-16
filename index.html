@@ -4,84 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>回報模板</title>
-    <style>
-      :root {
-        --font-size: 18px;
-        --padding: 5px;
-        --container-width: 500px;
-        --error-color: red;
-      }
-
-      body {
-        margin: 0;
-        padding: 0;
-        height: 100vh;
-        font-family: Arial, sans-serif;
-        line-height: 1.6;
-      }
-
-      input, textarea, select {
-        font-size: var(--font-size);
-        padding: var(--padding);
-      }
-
-      .container {
-        margin: 20px auto;
-        max-width: var(--container-width);
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-      }
-
-      input {
-        width: 100%;
-        box-sizing: border-box;
-      }
-
-      textarea {
-        min-height: 300px;
-        padding: 10px;
-        line-height: 1.5;
-      }
-
-      button {
-        padding: 10px 20px;
-        align-self: center;
-        cursor: pointer;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        transition: background-color 0.3s ease;
-      }
-
-      button:hover {
-        background-color: #0056b3;
-      }
-
-      button:active {
-        background-color: #003f7f;
-      }
-
-      #error-message {
-        color: var(--error-color);
-        margin-top: 10px;
-        font-size: 14px;
-      }
-    </style>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <form class="container">
-      <div class="input-group">
-        <label for="clinic-name" class="label">診所名稱</label>
-        <input
-          type="text"
-          class="input"
-          id="clinic-name"
-          name="clinic-name"
-          required
-        />
-      </div>
       <div class="input-group">
         <label for="service-number" class="label">醫代</label>
         <input
@@ -89,6 +15,16 @@
           class="input"
           id="service-number"
           name="service-number"
+          required
+        />
+      </div>
+      <div class="input-group">
+        <label for="clinic-name" class="label">診所名稱</label>
+        <input
+          type="text"
+          class="input"
+          id="clinic-name"
+          name="clinic-name"
           required
         />
       </div>
@@ -103,109 +39,12 @@
         id="textarea"
         placeholder="這裡會顯示生成的內容"
       ></textarea>
-      <button type="button">複製</button>
+      <div class="button-group">
+        <button class="copy" type="button">複製</button>
+        <button class="clear" type="button">清空</button>
+      </div>
       <div id="error-message"></div>
     </form>
-    <script>
-                  const date = new Date();
-                  const today = date.toLocaleDateString('zh-TW', {
-                    year: "numeric",
-                    month: '2-digit',
-                    day: "2-digit"
-                  });
-
-                  const elements = {
-                    clinic: document.querySelector('#clinic-name'),
-                    serviceNo: document.querySelector('#service-number'),
-                    hisGroup: document.querySelector('#his'),
-                    textarea: document.querySelector('#textarea'),
-                    copyButton: document.querySelector('button')
-                  };
-
-                  const hisSnippets = [
-                    {
-                      his: 'vision',
-                      name: '展望',
-                      snippet: () => (
-                        `您好，這裡是翔評同仁。以下事項回報\n` +
-                        `院所名稱：${elements.clinic.value} ${elements.serviceNo.value}\n` +
-                        `連絡人：診所回報\n` +
-                        `連絡時間：${today}\n` +
-                        `問題發生時間：${today}\n` +
-                        `問題敘述：\n\n` +
-                        `再請協助處理，謝謝！`
-                      )
-                    },
-                    {
-                      his: 'realsun',
-                      name: '耀聖',
-                      snippet: () => (
-                        `您好，${elements.clinic.value} ${elements.serviceNo.value}\n` +
-                        `診所回報\n\n` +
-                        `再請協助處理，謝謝！`
-                      )
-                    }
-                  ];
-
-                  function populateHisOptions(hisSnippets, hisGroup) {
-                    hisSnippets.forEach(el => {
-                      const option = document.createElement('option');
-                      option.value = el.his;
-                      option.innerText = el.name;
-                      hisGroup.appendChild(option);
-                    });
-                  }
-
-                  function handleHisChange(hisSnippets, elements) {
-                    if (elements.clinic.value === '' || elements.serviceNo.value === '') {
-                            elements.hisGroup.value = '';
-                      showError('請填入所有資料');
-                      return;
-                    }
-
-                    const selectedSnippet = hisSnippets.find(el => el.his === elements.hisGroup.value);
-                    if (selectedSnippet) {
-                      elements.textarea.value = selectedSnippet.snippet();
-                    }
-                  }
-
-                  function copyToClipboard(textarea) {
-                    if (textarea.value === '') {
-                      showError('請填入所有資料');
-                      return;
-                    }
-                    navigator.clipboard.writeText(textarea.value)
-                      .then(() => {
-                        alert('已複製到剪貼簿');
-                      })
-                      .catch(err => {
-                        console.error('Failed to copy: ', err);
-                      });
-                  }
-
-                  function showError(message) {
-                    const errorDiv = document.querySelector('#error-message');
-                    if (!errorDiv) {
-                      const newErrorDiv = document.createElement('div');
-                      newErrorDiv.id = 'error-message';
-                      newErrorDiv.style.color = 'red';
-                      newErrorDiv.style.marginTop = '10px';
-                      newErrorDiv.innerText = message;
-                      document.querySelector('.container').appendChild(newErrorDiv);
-                    } else {
-                      errorDiv.innerText = message;
-                    }
-                  }
-
-                  populateHisOptions(hisSnippets, elements.hisGroup);
-
-                  elements.hisGroup.addEventListener('change', () => {
-                    handleHisChange(hisSnippets, elements);
-                  });
-
-                  elements.copyButton.addEventListener('click', () => {
-                    copyToClipboard(elements.textarea);
-                  });
-    </script>
+    <script src="app.js"></script>
   </body>
 </html>

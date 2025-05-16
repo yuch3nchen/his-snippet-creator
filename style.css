@@ -1,0 +1,74 @@
+:root {
+  --font-size: 18px;
+  --padding: 5px;
+  --container-width: 500px;
+  --error-color: red;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+input,
+textarea,
+select {
+  font-size: var(--font-size);
+  padding: var(--padding);
+}
+
+.container {
+  margin: 20px auto;
+  max-width: var(--container-width);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+textarea {
+  min-height: 300px;
+  padding: 10px;
+  line-height: 1.5;
+}
+
+button {
+  padding: 10px 20px;
+  align-self: center;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:active {
+  background-color: #003f7f;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+}
+
+button.clear {
+  background-color: var(--error-color);
+}
+
+#error-message {
+  color: var(--error-color);
+  margin-top: 10px;
+  font-size: 14px;
+}
